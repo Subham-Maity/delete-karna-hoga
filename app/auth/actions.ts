@@ -44,7 +44,6 @@ export async function register(formData:FormData) {
        console.log('Registration error : ',error);
        return { success : false, message : "Unexpected error occurred during registration." }
     }
-    redirect("/auth/login");
 }
 
 export async function login(formData: FormData) {

@@ -2,11 +2,13 @@
 
 
 import Link from "next/link"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "@/components/ui/toast";
 import SearchNews from "../component/search-news";
 import { useNewsStore } from "@/app/news/store/newsStore";
+import { getCurrentUser } from "../api/auth/lib/session";
 import { logout } from "../auth/actions";
+import { useRouter } from "next/navigation";
 
 export default function News() {
 
@@ -15,6 +17,8 @@ export default function News() {
     const [prev, setPrev] = useState(0);
     const [next, setNext] = useState(paginate);
     const [asc, setAsc] = useState(false);
+    const [showButton,setShowButton] = useState(false);
+    const router = useRouter();
 
     function popUp() {
         {
@@ -28,6 +32,20 @@ export default function News() {
                 })
         }
     }
+
+    useEffect(() => {
+        async function readCookie(){
+            const res = await getCurrentUser();
+            console.log('result',res);
+            if(!res){
+                setShowButton(false);
+            }
+            else {
+                setShowButton(true);
+            }
+        }
+        readCookie();
+    },[]);
 
     return (
         <div className="min-h-screen bg-background text-foreground py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
@@ -44,12 +62,21 @@ export default function News() {
                     >
                         Dashboard →
                     </Link>
-                    <button
-                        onClick={async () => { await logout() }}
+                    { showButton ? (
+                        <button
+                        onClick={async () => { await logout(); window.location.reload(); }}
                         className="px-3.5 py-1.5 rounded-xl border border-border text-sm font-medium hover:bg-muted text-foreground transition-all cursor-pointer shadow-xs"
                     >
                         Logout
-                    </button>
+                    </button> ) : (
+                        <button
+                        onClick={ () => { router.push('/auth/login') }}
+                        className="px-3.5 py-1.5 rounded-xl border border-border text-sm font-medium hover:bg-muted text-foreground transition-all cursor-pointer shadow-xs"
+                    >
+                        Login
+                    </button> 
+                    )
+                    }
                 </div>
             </div>
 
