@@ -18,3 +18,10 @@ model User {
   password  String
   createdAt DateTime @default(now())
 }
+
+model News {
+  id  String @id @default(uuid())
+  title String @unique
+  description String
+  publishedAt DateTime @default(now())
+}

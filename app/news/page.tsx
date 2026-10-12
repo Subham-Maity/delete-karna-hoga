@@ -1,11 +1,9 @@
 'use client'
 
-import { useQuery } from "@tanstack/react-query"
-import { getNews } from "../lib/utils"
+
 import Link from "next/link"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "@/components/ui/toast";
-import ErrorNews from "../component/error-news";
 import SearchNews from "../component/search-news";
 import { useNewsStore } from "@/app/news/store/newsStore";
 import { logout } from "../auth/actions";
@@ -39,7 +37,13 @@ export default function News() {
                     <h1 className="text-xl font-bold tracking-tight">News Feed</h1>
                     <p className="text-xs text-muted-foreground">Browse and search latest articles</p>
                 </div>
-                <div>
+                <div className="flex items-center gap-3">
+                    <Link
+                        href="/news/dashboard"
+                        className="px-3.5 py-1.5 rounded-xl border border-border text-sm font-medium hover:bg-muted text-foreground transition-all cursor-pointer shadow-xs"
+                    >
+                        Dashboard →
+                    </Link>
                     <button
                         onClick={async () => { await logout() }}
                         className="px-3.5 py-1.5 rounded-xl border border-border text-sm font-medium hover:bg-muted text-foreground transition-all cursor-pointer shadow-xs"
@@ -73,13 +77,13 @@ export default function News() {
 
             {/* Articles List */}
             <div className="space-y-2.5">
-                {asc ? searchNews.slice(next-5,next).sort((a: any, b: any) => -a.publishedAt.localeCompare(b.publishedAt)).map((e) => (
+                {asc ? searchNews.slice(next - 5, next).sort((a: any, b: any) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()).map((e) => (
                     <div key={e.title} className="p-4 rounded-xl border border-border bg-card hover:bg-muted/40 hover:border-primary/30 transition-all">
                         <Link href={`/news/${encodeURIComponent(e.title)}`} prefetch={false} className="font-medium text-sm sm:text-base hover:text-primary transition-colors block leading-snug">
                             {e.title}
                         </Link>
                     </div>
-                )) : searchNews.slice(next-5,next).sort((a: any, b: any) => a.publishedAt.localeCompare(b.publishedAt)).map((e) => (
+                )) : searchNews.slice(next - 5, next).sort((a: any, b: any) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()).map((e) => (
                     <div key={e.title} className="p-4 rounded-xl border border-border bg-card hover:bg-muted/40 hover:border-primary/30 transition-all">
                         <Link href={`/news/${encodeURIComponent(e.title)}`} prefetch={false} className="font-medium text-sm sm:text-base hover:text-primary transition-colors block leading-snug">
                             {e.title}
