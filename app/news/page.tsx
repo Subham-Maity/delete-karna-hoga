@@ -7,7 +7,7 @@ import { toast } from "@/components/ui/toast";
 import SearchNews from "../component/search-news";
 import { useNewsStore } from "@/app/news/store/newsStore";
 import { getCurrentUser } from "../api/auth/lib/session";
-import { logout } from "../auth/actions";
+import { logout } from "../api/auth/action";
 import { useRouter } from "next/navigation";
 
 export default function News() {

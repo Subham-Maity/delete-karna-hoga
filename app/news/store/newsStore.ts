@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { getNews } from '../action';
+import { getNews } from '../../api/news/action';
 
 type News = {
     id : string;

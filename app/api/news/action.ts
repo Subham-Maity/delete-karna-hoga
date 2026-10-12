@@ -1,7 +1,7 @@
 "use server"
 
 import { cookies } from "next/headers";
-import { prisma } from "../lib/prisma";
+import { prisma } from "../../lib/prisma";
 import jwt from "jsonwebtoken";
 
 export async function createNews(formData: FormData) {

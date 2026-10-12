@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import argon2 from "argon2";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { registerSchema } from "@/app/lib/schemas/auth.schema";
 
 async function findUserByMail(email:string){
     return prisma.user.findUnique({
@@ -13,20 +14,23 @@ async function findUserByMail(email:string){
 }
 
 export async function register(formData:FormData) {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    const result = registerSchema.safeParse({
+        email : formData.get("email"),
+        password : formData.get("password")
+    })
 
-    if(! email || !password) {
+    if(!result.success) {
         return { success : false, message : "Email and password required." };
     }
 
-    const existingUser = await findUserByMail(email);
-
-    if(existingUser){
-        return { success: false, message: "Email already registered" };
-    }
+    const { email , password } = result.data;
 
     try {
+        const existingUser = await findUserByMail(email);
+
+        if(existingUser){
+            return { success: false, message: "Email already registered" };
+        }
         const hashedPass = await argon2.hash(password);
 
         const newUser = await prisma.user.create({
@@ -47,12 +51,16 @@ export async function register(formData:FormData) {
 }
 
 export async function login(formData: FormData) {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    const result = registerSchema.safeParse({
+        email : formData.get("email"),
+        password : formData.get("password")
+    })
 
-    if(! email || !password) {
+    if(!result.success) {
         return { success : false, message : "Email and password required." };
     }
+
+    const { email , password } = result.data;
 
     const existingUser = await findUserByMail(email);
 

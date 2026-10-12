@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useNewsStore } from "../news/store/newsStore";
-import { getNews } from "../news/action";
+import { getNews } from "../api/news/action";
 
 export default function SearchNews() {
     const [search, setSearch] = useState("");

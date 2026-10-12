@@ -1,15 +1,38 @@
 "use client";
 
 import { useState } from "react";
-import { login, register } from "../../actions";
+import { login, register } from "../../../api/auth/action";
+import { registerSchema } from "@/app/lib/schemas/auth.schema";
+import { email } from "zod";
 
 export function AuthForm() {
     const [showRegister, setShowRegister] = useState(false);
+    const [error, setError] = useState("");
+
+    async function handleSubmit(formData : FormData) {
+        setError("");
+
+        const result = registerSchema.safeParse({
+            email : formData.get("email"),
+            password : formData.get("password")
+        })
+
+        if(!result.success) {
+            setError(result.error.issues[0].message);
+            return;
+        }
+
+        const response = await login(formData);
+
+        if(!response.success) {
+            setError(response.message);
+        }
+    }
 
     return (
         <div className="w-full max-w-md mx-auto p-6 sm:p-8 rounded-3xl bg-card border border-border shadow-xl backdrop-blur-sm">
             {!showRegister ? (
-                <form action={async (formData) => { await login(formData); }} className="flex flex-col gap-4">
+                <form action={handleSubmit} className="flex flex-col gap-4">
                     <div className="text-center mb-2">
                         <h2 className="text-2xl font-bold tracking-tight text-foreground">Login</h2>
                         <p className="text-xs text-muted-foreground mt-1">Enter your credentials to access your account</p>
@@ -53,7 +76,7 @@ export function AuthForm() {
                     </div>
                 </form>
             ) : (
-                <form action={async (formData) => { await register(formData); }} className="flex flex-col gap-4">
+                <form action={handleSubmit} className="flex flex-col gap-4">
                     <div className="text-center mb-2">
                         <h2 className="text-2xl font-bold tracking-tight text-foreground">Sign Up</h2>
                         <p className="text-xs text-muted-foreground mt-1">Create a new account to get started</p>

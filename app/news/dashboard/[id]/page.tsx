@@ -4,8 +4,8 @@ import { useParams, useRouter } from "next/navigation";
 import { useNewsStore } from "../../store/newsStore";
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "@/app/api/auth/lib/session";
-import { updateNews } from "../action";
-import { getNewsById } from "../../action";
+import { updateNews } from "../../../api/news/dashboard/action";
+import { getNewsById } from "../../../api/news/action";
 
 type Article = {
     id: string;

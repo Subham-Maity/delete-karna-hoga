@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "@/app/api/auth/lib/session";
-import { getNewsById } from "../action";
+import { getNewsById } from "../../api/news/action";
 
 type NewsDataType = {
     id : string;

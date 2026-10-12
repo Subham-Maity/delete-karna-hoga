@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { createNews } from "../action";
+import { createNews } from "../../api/news/action";
 import { useNewsStore } from "../store/newsStore";
 import { toast } from "@/components/ui/toast";
 import Link from "next/link";
