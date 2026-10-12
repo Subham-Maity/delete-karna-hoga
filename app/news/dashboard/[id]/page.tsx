@@ -5,7 +5,7 @@ import { useNewsStore } from "../../store/newsStore";
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "@/app/api/auth/lib/session";
 import { updateNews } from "../action";
-import { getNews } from "../../action";
+import { getNewsById } from "../../action";
 
 type Article = {
     id: string;
@@ -20,11 +20,8 @@ export default function UpdateArticles() {
 
     const params = useParams();
     console.log('Params', params);
-    const rawTitle = params.id as string;
-    console.log('Raw title', rawTitle);
-    const title = decodeURIComponent(rawTitle).trim();
-    console.log('Title', title)
-    const [article, setArticle] = useState<Article | null>(null);
+    const [article, setArticle] = useState<Article | null>();
+    const id = params.id as string;
 
     const searchNews = useNewsStore((state) => state.fetchSearchNews);
     useEffect(() => {
@@ -35,14 +32,14 @@ export default function UpdateArticles() {
                 return;
             }
             setIsAuthenticated(true);
-            const res = await getNews(title);
-
-            if (res.success && res.data?.[0]) {
-                setArticle(res.data[0]);
+            async function getData(id:string){
+                const res = await getNewsById(id);
+                if (res.success && res.data) setArticle(res.data);
             }
+            getData(id);
         }
         checkAuthAndLoad();
-    }, [title, searchNews, router]);
+    }, [id, searchNews, router]);
 
     if (!isAuthenticated) {
         return (

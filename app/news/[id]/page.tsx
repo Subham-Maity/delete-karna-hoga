@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "@/app/api/auth/lib/session";
-import { getNews } from "../action";
+import { getNewsById } from "../action";
 
 type NewsDataType = {
     id : string;
@@ -18,8 +18,7 @@ export default function NewsDetails() {
     const router = useRouter();
 
     const params = useParams();
-    const rawTitle = params.title as string;
-    const title = decodeURIComponent(rawTitle).trim();
+    const id = params.id as string;
     
     useEffect(() => {
         async function checkAuthAndLoad(){
@@ -30,13 +29,13 @@ export default function NewsDetails() {
             }
             setIsAuthenticated(true);
         }
-        async function getData(title:string) {
-            const res = await getNews(title);
-            setNewsData(res.data[0]);
+        async function getData(id:string) {
+            const res = await getNewsById(id);
+            if(res.success && res.data) setNewsData(res.data);
         }
-        getData(title);
+        getData(id);
         checkAuthAndLoad();
-    },[title,router]);
+    },[id,router]);
 
     if(!isAuthenticated){
         return (

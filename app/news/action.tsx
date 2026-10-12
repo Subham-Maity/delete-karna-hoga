@@ -55,3 +55,22 @@ export async function getNews(query: string = "") {
         return { success: false, data: [] };
     }
 }
+
+export async function getNewsById(id: string) {
+    try {
+        const news = await prisma.news.findUnique({
+            where : {
+                id
+            }
+        });
+
+        if(!news) {
+            return { success : false, data : null };
+        }
+
+        return { success : true, data : news };
+    } catch (error) {
+        console.error("Error fetching news : ",error);
+        return { success : false, data : null }
+    }
+}

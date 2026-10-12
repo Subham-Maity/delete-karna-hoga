@@ -105,14 +105,14 @@ export default function News() {
             {/* Articles List */}
             <div className="space-y-2.5">
                 {asc ? searchNews.slice(next - 5, next).sort((a: any, b: any) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()).map((e) => (
-                    <div key={e.title} className="p-4 rounded-xl border border-border bg-card hover:bg-muted/40 hover:border-primary/30 transition-all">
-                        <Link href={`/news/${encodeURIComponent(e.title)}`} prefetch={false} className="font-medium text-sm sm:text-base hover:text-primary transition-colors block leading-snug">
+                    <div key={e.id} className="p-4 rounded-xl border border-border bg-card hover:bg-muted/40 hover:border-primary/30 transition-all">
+                        <Link href={`/news/${encodeURIComponent(e.id)}`} prefetch={false} className="font-medium text-sm sm:text-base hover:text-primary transition-colors block leading-snug">
                             {e.title}
                         </Link>
                     </div>
                 )) : searchNews.slice(next - 5, next).sort((a: any, b: any) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()).map((e) => (
-                    <div key={e.title} className="p-4 rounded-xl border border-border bg-card hover:bg-muted/40 hover:border-primary/30 transition-all">
-                        <Link href={`/news/${encodeURIComponent(e.title)}`} prefetch={false} className="font-medium text-sm sm:text-base hover:text-primary transition-colors block leading-snug">
+                    <div key={e.id} className="p-4 rounded-xl border border-border bg-card hover:bg-muted/40 hover:border-primary/30 transition-all">
+                        <Link href={`/news/${encodeURIComponent(e.id)}`} prefetch={false} className="font-medium text-sm sm:text-base hover:text-primary transition-colors block leading-snug">
                             {e.title}
                         </Link>
                     </div>
